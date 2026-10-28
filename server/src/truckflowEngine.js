@@ -96,7 +96,7 @@ function emptySnapshot() {
     lastLecture: null,
     camionsSurSite: [],
     passagesDuJour: [],
-    hourly: Array.from({ length: 17 }, (_, i) => ({ heure: i + 5, entrees: 0 })),
+    hourly: Array.from({ length: 24 }, (_, i) => ({ heure: i, entrees: 0 })),
     journal: [],
     anomalies: [],
     overstayThresholdSec: OVERSTAY_THRESHOLD_SEC,
@@ -109,6 +109,7 @@ export class TruckflowEngine {
     this.onBroadcast = onBroadcast || (() => {});
     this.cached = emptySnapshot();
     this.seenAlertIds = new Set();
+    this.overstayAlertedIds = new Set();
   }
 
   start() {
@@ -195,7 +196,7 @@ export class TruckflowEngine {
       : 0;
     const tonnageNetDuJour = closedRows.reduce((sum, r) => sum + (r.Net || 0), 0) / 1000;
 
-    const hourly = Array.from({ length: 17 }, (_, i) => ({ heure: i + 5, entrees: 0 }));
+    const hourly = Array.from({ length: 24 }, (_, i) => ({ heure: i, entrees: 0 }));
     for (const r of openToday) {
       const ts = toMs(r.WeightEntryDate || r.Creation);
       const bucket = ts && hourly.find((b) => b.heure === new Date(ts).getHours());
@@ -238,6 +239,11 @@ export class TruckflowEngine {
         horodatage: now,
         details: `Alerte durée dépassée — le camion ${p.plaque} est présent depuis plus du seuil autorisé.`,
       }));
+    // Only toast each overstaying truck once (matches the simulator's
+    // one-shot `overstayAlerted` flag) — without this, the same truck
+    // re-fires a toast on every poll for as long as it stays overdue.
+    const newOverstays = overstayAnomalies.filter((a) => !this.overstayAlertedIds.has(a.id));
+    for (const a of newOverstays) this.overstayAlertedIds.add(a.id);
 
     const anomalies = [...overstayAnomalies, ...alertRows];
 
@@ -288,7 +294,7 @@ export class TruckflowEngine {
 
     const extra = {};
     if (newAlerts.length) extra.alert = newAlerts[0];
-    else if (overstayAnomalies.length) extra.alert = overstayAnomalies[0];
+    else if (newOverstays.length) extra.alert = newOverstays[0];
 
     this.onBroadcast({ type: "snapshot", data: this.cached, ...extra });
   }
