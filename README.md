@@ -32,6 +32,37 @@ npm start        # plain start
 
 Listens on `http://localhost:3001` (override with `PORT`).
 
+## Docker
+
+The API itself runs in a container. `TruckFlowDB` stays on the Truckflow
+machine's own SQL Server, exactly as installed by Précia Molen — it is
+never containerized, just reached over the network like any other
+database client.
+
+```
+cp .env.example .env     # fill in DATA_SOURCE / TRUCKFLOW_DB_* as above
+docker compose up -d --build
+docker compose logs -f   # watch it start
+```
+
+This builds the image from `Dockerfile` and starts it via
+`docker-compose.yml`, reading config from `.env` and publishing port
+`3001`. To stop it: `docker compose down`.
+
+**`TRUCKFLOW_DB_HOST` and Docker:** the container needs to reach SQL
+Server over the network — `localhost` means "this container," not the
+Truckflow machine.
+
+- Container running on a **different** machine than Truckflow (the
+  normal case): set `TRUCKFLOW_DB_HOST` to the Truckflow machine's real
+  LAN IP, same as the non-Docker setup.
+- Container running **on the Truckflow machine itself**: set
+  `TRUCKFLOW_DB_HOST=host.docker.internal` instead of `localhost`.
+
+Rebuild after changing code: `docker compose up -d --build`. Just
+changed `.env`? `docker compose up -d` (no `--build`) is enough —
+restarts the container with the new values.
+
 ## API
 
 | Endpoint | Description |
