@@ -1,0 +1,84 @@
+:root {
+  /* Command-center dark palette */
+  --bg-0: #080b12;
+  --bg-1: #0d1119;
+  --panel: rgba(20, 26, 38, 0.72);
+  --panel-solid: #141a26;
+  --panel-hi: rgba(32, 41, 59, 0.6);
+  --border: rgba(120, 140, 180, 0.14);
+  --border-hi: rgba(120, 140, 180, 0.28);
+
+  --text: #e8edf6;
+  --text-dim: #8b97ad;
+  --text-faint: #5b6678;
+
+  --accent: #38bdf8;
+  --accent-2: #6366f1;
+  --accent-glow: rgba(56, 189, 248, 0.5);
+
+  --green: #34d399;
+  --green-glow: rgba(52, 211, 153, 0.5);
+  --orange: #fbbf24;
+  --orange-glow: rgba(251, 191, 36, 0.5);
+  --red: #fb5a6b;
+  --red-glow: rgba(251, 90, 107, 0.55);
+
+  --sans: "Inter", system-ui, "Segoe UI", Roboto, sans-serif;
+  --mono: "SF Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  font: 14px/1.5 var(--sans);
+  color: var(--text);
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, rgba(56, 189, 248, 0.08), transparent 60%),
+    radial-gradient(1000px 500px at 110% 10%, rgba(99, 102, 241, 0.1), transparent 55%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-0));
+  background-attachment: fixed;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+input {
+  font: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(120, 140, 180, 0.2);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(120, 140, 180, 0.35);
+  background-clip: padding-box;
+}

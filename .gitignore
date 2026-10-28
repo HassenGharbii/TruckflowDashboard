@@ -1,3 +1,25 @@
+# Client's copied production/vendor material — never ours to version control
+Survision/
+Truckflow/
+
+# Dependencies
 node_modules/
+
+# Secrets
 .env
+
+# Build output
+dist/
+dist-ssr/
+
+# Schema dumps / logs
 truckflow-schema.json
+*.local
+*.log
+npm-debug.log*
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store

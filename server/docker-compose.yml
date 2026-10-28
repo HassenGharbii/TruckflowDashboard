@@ -1,0 +1,10 @@
+services:
+  api:
+    build: .
+    image: truckflow-dashboard-api
+    container_name: truckflow-dashboard-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "3001:3001"
